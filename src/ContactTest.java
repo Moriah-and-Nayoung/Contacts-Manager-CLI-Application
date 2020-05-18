@@ -1,3 +1,5 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,10 +15,9 @@ public class ContactTest {
     static String filename = "contacts.txt";
     static Path dataDirectory = Paths.get(directory);
     static Path dataFile = Paths.get(directory, filename);
+    Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-
-
 
 
 //        Manually add to file
@@ -51,12 +52,12 @@ public class ContactTest {
 
         switch (choice) {
             case 1://view  contacts
+
                 List<String> lines = readFile(dataFile);
+                System.out.printf("%-5s %s%n", "Name |", "Phone Number");
+                System.out.println("____________");
                 for (String line : lines) {
-                    System.out.printf("TEST %s\n", line);
-//                    Contact contact1 = new Contact("nayo","kim","123-123-1238");
-//                    contactArray.add(contact1);
-//                    System.out.println(contacts.getFirstName() + " " + contacts.getLastName() + " " + contacts.getPhoneNumber());
+                    System.out.printf("%s\n", line);
                 }
                 break;
             case 2: // add new contact
@@ -65,35 +66,22 @@ public class ContactTest {
                 System.out.println("Enter your contact's first name");
                 String enteredFirstName = scanner.nextLine();
                 System.out.println("Enter your contact's last name");
-               String enteredLastName = scanner.nextLine();
+                String enteredLastName = scanner.nextLine();
                 System.out.println("Enter your contact's phone number");
-               String enteredPhoneNumber = scanner.nextLine();
-                System.out.println("enteredFirstName = " + enteredFirstName);
-                System.out.println("enteredLastName = " + enteredLastName);
-                System.out.println("enteredPhoneNumber = " + enteredPhoneNumber);
-                List<String> contactsArray = new ArrayList<>();
+                String enteredPhoneNumber = scanner.nextLine();
 
-                contactsArray.add(enteredFirstName);
-                contactsArray.add(enteredLastName);
-                contactsArray.add(enteredPhoneNumber);
-                List<String> contactArray = Arrays.asList(enteredFirstName, enteredLastName, enteredPhoneNumber);
-                System.out.println("ContactsArray: " + contactArray);
+                List<String> newEntry = Arrays.asList(enteredFirstName + " " + enteredLastName + "|" + enteredPhoneNumber);
+                newEntry = writeFile(dataFile, newEntry);
                 break;
+
+            case 3: //search
+                searchContact();
 
         }
 
         return true;
     }
 
-    public static List<String> readFile(Path aFile) {
-        try {
-            return (Files.readAllLines(aFile));
-        } catch (IOException e) {
-            System.out.println("Problem reading the file");
-            e.printStackTrace();
-        }
-        return null;
-    }
 
     //creating contacts menu
     public static String returnMenuDisplay() {
@@ -129,20 +117,54 @@ public class ContactTest {
         }
     }
 
-    public static void writeFile(Path aFile, List<String> aList) {
+    public static List<String> writeFile(Path aFile, List<String> aList) {
         try {
             Files.write(aFile, aList, StandardOpenOption.APPEND);
         } catch (IOException e) {
             System.out.println("Problems writing the file");
             e.printStackTrace();
         }
+        return null;
     }
 
+    public static List<String> readFile(Path aFile) {
+        try {
+            return (Files.readAllLines(aFile));
+        } catch (IOException e) {
+            System.out.println("Problem reading the file");
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+
+
+    public static String searchContact(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter a name you would like to search: ");
+        String userSearch = sc.nextLine();
+
+        Path filePath = Paths.get(directory, filename);
+        while(true) {
+            List<String> lines = readFile(filePath);
+            for (String line : lines) {
+                if (line.toLowerCase().contains(userSearch.toLowerCase())) {
+                    System.out.println( "Found: " + line);
+                }
+            }
+            System.out.println("Contact not found.");
+            return searchContact();
+        }
+    }
+
+
     //prompt for a response
-    private static int promptUserForChoice() {
+    public static int promptUserForChoice() {
         Scanner scanner = new Scanner(System.in);
         int response = Integer.parseInt(scanner.nextLine());
         return response;
     }
+
 
 }
