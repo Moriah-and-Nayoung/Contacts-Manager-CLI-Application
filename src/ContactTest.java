@@ -4,6 +4,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -16,9 +17,9 @@ public class ContactTest {
     public static void main(String[] args) {
 
 
-        List<String> contactsArray = new ArrayList<>();
 
 
+//        Manually add to file
 //        contacts.add("Nayo | 123-234-2344");
 //        contacts.add("MH | 123-234-2344");
 
@@ -39,8 +40,8 @@ public class ContactTest {
         //Method - read file
         readFile(dataFile);
 
-        System.out.println("contactsArray = " + contactsArray.isEmpty());
-        System.out.println("contactsArrayREALTest = " + contactsArray);
+//        System.out.println("contactsArray = " + contactsArray.isEmpty());
+//        System.out.println("contactsArrayREALTest = " + contactsArray);
     }
 
     // User input selection
@@ -51,72 +52,38 @@ public class ContactTest {
         switch (choice) {
             case 1://view  contacts
                 List<String> lines = readFile(dataFile);
-                List<Contact> contactArray = new ArrayList<>();
                 for (String line : lines) {
-                    System.out.printf("%s\n", line);
+                    System.out.printf("TEST %s\n", line);
 //                    Contact contact1 = new Contact("nayo","kim","123-123-1238");
 //                    contactArray.add(contact1);
 //                    System.out.println(contacts.getFirstName() + " " + contacts.getLastName() + " " + contacts.getPhoneNumber());
                 }
+                break;
             case 2: // add new contact
 
+                Scanner scanner = new Scanner(System.in);
+                System.out.println("Enter your contact's first name");
+                String enteredFirstName = scanner.nextLine();
+                System.out.println("Enter your contact's last name");
+               String enteredLastName = scanner.nextLine();
+                System.out.println("Enter your contact's phone number");
+               String enteredPhoneNumber = scanner.nextLine();
+                System.out.println("enteredFirstName = " + enteredFirstName);
+                System.out.println("enteredLastName = " + enteredLastName);
+                System.out.println("enteredPhoneNumber = " + enteredPhoneNumber);
+                List<String> contactsArray = new ArrayList<>();
 
+                contactsArray.add(enteredFirstName);
+                contactsArray.add(enteredLastName);
+                contactsArray.add(enteredPhoneNumber);
+                List<String> contactArray = Arrays.asList(enteredFirstName, enteredLastName, enteredPhoneNumber);
+                System.out.println("ContactsArray: " + contactArray);
+                break;
 
         }
 
         return true;
     }
-//    private static boolean executeUserChoice(int choice) {
-//        boolean continueRunningApp = true;
-//
-//        switch (choice) {
-//            case 0:
-//                continueRunningApp = false;
-//                break;
-//            case 1: //View contacts
-//                System.out.println("\n");
-//                for(Contacts contact : contacts.findAll()) {
-//                    System.out.printf("%s -- %s\n", movie.getName(), movie.getCategory());
-//                }
-//                System.out.println("\n");
-//                break;
-//            case 2: //animated
-//                System.out.println("\n");
-//                 contactsArray.add("Iggy | 123-1234");
-//                viewMoviesByCategory("animated");
-//                System.out.println("\n");
-//                break;
-//            case 3: //drama
-//                System.out.println("\n");
-//                viewMoviesByCategory("drama");
-//                System.out.println("\n");
-//                break;
-//            case 4: //horror
-//                System.out.println("\n");
-//                viewMoviesByCategory("horror");
-//                System.out.println("\n");
-//                break;
-//            case 5: //scifi
-//                System.out.println("\n");
-//                viewMoviesByCategory("scifi");
-//                  Method - write File
-//                  writeFile(dataFile, contactsArray);
-//                System.out.println("\n");
-//                break;
-//        }
-//
-//        return continueRunningApp;
-//    }
-//
-//    private static void viewContacts(String category) {
-//        for(Movie movie : MoviesArray.findAll()) {
-//            if(movie.getCategory().equalsIgnoreCase(category)) {
-//                //Display the movie.
-//                System.out.printf("%s -- %s\n", movie.getFirstName(), movie.getCategory());
-//            }
-//        }
-//    }
-
 
     public static List<String> readFile(Path aFile) {
         try {
