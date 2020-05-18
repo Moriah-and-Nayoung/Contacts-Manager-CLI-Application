@@ -8,11 +8,13 @@ import java.util.List;
 import java.util.Scanner;
 
 public class ContactTest {
+    static String directory = "data";
+    static String filename = "contacts.txt";
+    static Path dataDirectory = Paths.get(directory);
+    static Path dataFile = Paths.get(directory, filename);
+
     public static void main(String[] args) {
-        String directory = "data";
-        String filename = "contacts.txt";
-        Path dataDirectory = Paths.get(directory);
-        Path dataFile = Paths.get(directory,filename);
+
 
         List<String> contactsArray = new ArrayList<>();
 
@@ -21,12 +23,11 @@ public class ContactTest {
 //        contacts.add("MH | 123-234-2344");
 
         boolean running = true;
-        do {
+        while (running) {
             System.out.println(returnMenuDisplay());
-            Scanner scanner = new Scanner(System.in);
-            int userInput = Integer.parseInt((scanner.nextLine()));
-            System.out.println(userInput);
-        }while(running);
+            int userInput = promptUserForChoice();
+            running = executeUserChoice(userInput);
+        }
 
 
         //Method - create directory
@@ -36,7 +37,6 @@ public class ContactTest {
         createFile(dataFile);
 
         //Method - read file
-
         readFile(dataFile);
 
         System.out.println("contactsArray = " + contactsArray.isEmpty());
@@ -45,6 +45,26 @@ public class ContactTest {
 
     // User input selection
 
+    private static boolean executeUserChoice(int choice) {
+        boolean continueRunningApp = true;
+
+        switch (choice) {
+            case 1://view  contacts
+                List<String> lines = readFile(dataFile);
+                List<Contact> contactArray = new ArrayList<>();
+                for (String line : lines) {
+                    System.out.printf("%s\n", line);
+//                    Contact contact1 = new Contact("nayo","kim","123-123-1238");
+//                    contactArray.add(contact1);
+//                    System.out.println(contacts.getFirstName() + " " + contacts.getLastName() + " " + contacts.getPhoneNumber());
+                }
+            case 2: // add new contact
+
+
+        }
+
+        return true;
+    }
 //    private static boolean executeUserChoice(int choice) {
 //        boolean continueRunningApp = true;
 //
@@ -97,22 +117,18 @@ public class ContactTest {
 //    }
 
 
-
-
-    public static void readFile(Path aFile) {
+    public static List<String> readFile(Path aFile) {
         try {
-            List<String> lines = Files.readAllLines(aFile);
-            for (String line : lines) {
-                System.out.println("Contacts = " + line);
-            }
+            return (Files.readAllLines(aFile));
         } catch (IOException e) {
             System.out.println("Problem reading the file");
             e.printStackTrace();
         }
+        return null;
     }
 
     //creating contacts menu
-    public static String returnMenuDisplay(){
+    public static String returnMenuDisplay() {
         String userChoices = "1. View contacts.\n" +
                 "2. Add a new contact.\n" +
                 "3. Search a contact by name.\n" +
@@ -134,33 +150,31 @@ public class ContactTest {
         }
     }
 
-    public static void createFile(Path aFile){
-        if (!Files.exists(aFile)){
-            try{
+    public static void createFile(Path aFile) {
+        if (!Files.exists(aFile)) {
+            try {
                 Files.createFile(aFile);
-            } catch (IOException e){
+            } catch (IOException e) {
                 System.out.println("Problems creating the file ");
                 e.printStackTrace();
             }
         }
     }
 
-    public static void writeFile(Path aFile, List<String>aList){
-        try{
-            Files.write(aFile,aList, StandardOpenOption.APPEND);
-        } catch (IOException e){
+    public static void writeFile(Path aFile, List<String> aList) {
+        try {
+            Files.write(aFile, aList, StandardOpenOption.APPEND);
+        } catch (IOException e) {
             System.out.println("Problems writing the file");
             e.printStackTrace();
         }
     }
 
-
-
-
-
-
+    //prompt for a response
+    private static int promptUserForChoice() {
+        Scanner scanner = new Scanner(System.in);
+        int response = Integer.parseInt(scanner.nextLine());
+        return response;
+    }
 
 }
-
-
-

@@ -1,10 +1,14 @@
-public class Contacts {
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+public class Contact {
     String firstName;
     String lastName;
     String phoneNumber;
 
+
     //constructor
-    public Contacts(String firstName, String lastName, String phoneNumber){
+    public Contact(String firstName, String lastName, String phoneNumber){
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
