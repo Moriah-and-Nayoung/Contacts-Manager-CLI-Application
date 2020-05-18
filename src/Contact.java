@@ -1,11 +1,8 @@
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class Contact {
-    String firstName;
-    String lastName;
-    String phoneNumber;
-
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
 
     //constructor
     public Contact(String firstName, String lastName, String phoneNumber){

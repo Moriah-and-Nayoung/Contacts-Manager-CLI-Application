@@ -61,6 +61,7 @@ public class ContactTest {
             case 2: // add new contact
 
 
+
         }
 
         return true;
