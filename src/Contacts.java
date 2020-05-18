@@ -1,10 +1,10 @@
-public class ContactsList {
+public class Contacts {
     String firstName;
     String lastName;
     String phoneNumber;
 
     //constructor
-    public ContactsList(String firstName, String lastName, String phoneNumber){
+    public Contacts(String firstName, String lastName, String phoneNumber){
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;

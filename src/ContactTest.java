@@ -14,9 +14,11 @@ public class ContactTest {
         Path dataDirectory = Paths.get(directory);
         Path dataFile = Paths.get(directory,filename);
 
-        List<String> contacts = new ArrayList<>();
-        contacts.add("Nayo | 123-234-2344");
-        contacts.add("MH | 123-234-2344");
+        List<String> contactsArray = new ArrayList<>();
+
+
+//        contacts.add("Nayo | 123-234-2344");
+//        contacts.add("MH | 123-234-2344");
 
         boolean running = true;
         do {
@@ -33,9 +35,80 @@ public class ContactTest {
         //Method - create file
         createFile(dataFile);
 
-        //Method - write File
-        writeFile(dataFile, contacts);
+        //Method - read file
 
+        readFile(dataFile);
+
+        System.out.println("contactsArray = " + contactsArray.isEmpty());
+        System.out.println("contactsArrayREALTest = " + contactsArray);
+    }
+
+    // User input selection
+
+//    private static boolean executeUserChoice(int choice) {
+//        boolean continueRunningApp = true;
+//
+//        switch (choice) {
+//            case 0:
+//                continueRunningApp = false;
+//                break;
+//            case 1: //View contacts
+//                System.out.println("\n");
+//                for(Contacts contact : contacts.findAll()) {
+//                    System.out.printf("%s -- %s\n", movie.getName(), movie.getCategory());
+//                }
+//                System.out.println("\n");
+//                break;
+//            case 2: //animated
+//                System.out.println("\n");
+//                 contactsArray.add("Iggy | 123-1234");
+//                viewMoviesByCategory("animated");
+//                System.out.println("\n");
+//                break;
+//            case 3: //drama
+//                System.out.println("\n");
+//                viewMoviesByCategory("drama");
+//                System.out.println("\n");
+//                break;
+//            case 4: //horror
+//                System.out.println("\n");
+//                viewMoviesByCategory("horror");
+//                System.out.println("\n");
+//                break;
+//            case 5: //scifi
+//                System.out.println("\n");
+//                viewMoviesByCategory("scifi");
+//                  Method - write File
+//                  writeFile(dataFile, contactsArray);
+//                System.out.println("\n");
+//                break;
+//        }
+//
+//        return continueRunningApp;
+//    }
+//
+//    private static void viewContacts(String category) {
+//        for(Movie movie : MoviesArray.findAll()) {
+//            if(movie.getCategory().equalsIgnoreCase(category)) {
+//                //Display the movie.
+//                System.out.printf("%s -- %s\n", movie.getFirstName(), movie.getCategory());
+//            }
+//        }
+//    }
+
+
+
+
+    public static void readFile(Path aFile) {
+        try {
+            List<String> lines = Files.readAllLines(aFile);
+            for (String line : lines) {
+                System.out.println("Contacts = " + line);
+            }
+        } catch (IOException e) {
+            System.out.println("Problem reading the file");
+            e.printStackTrace();
+        }
     }
 
     //creating contacts menu
