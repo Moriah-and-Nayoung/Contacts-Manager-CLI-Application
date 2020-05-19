@@ -116,6 +116,7 @@ public class ContactTest {
         }
     }
 
+    //write file
     public static List<String> writeFile(Path aFile) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter your contact's first name");
@@ -135,6 +136,7 @@ public class ContactTest {
         return null;
     }
 
+    //rewrite the file if you want to delete
     public static List<String> reWriteFile(Path file, List<String> list) {
         try {
             Files.write(file, list);
@@ -145,6 +147,7 @@ public class ContactTest {
         return null;
     }
 
+    //read file
     public static List<String> readFile(Path aFile) {
         try {
             List<String> lines = Files.readAllLines(aFile);
@@ -190,30 +193,35 @@ public class ContactTest {
         }
     }
 
+
+
     public static void deleteEntry() {
         Scanner scanner = new Scanner(System.in);
-
-        Path filePath = Paths.get(directory, filename);
-        System.out.println("Who would you like to delete?");
+        System.out.println("Would you like to continue? y/n");
+        String userConfirmDelete = scanner.nextLine();
+        if (userConfirmDelete.toLowerCase().equals("y")) {
         readFile(dataFile);
+        System.out.println("Who would you like to delete?");
         String userDelete = scanner.nextLine();
-        try {
-            List<String> lines = Files.readAllLines(filePath);
-            List<String> newLines = new ArrayList<>();
-            for (String line : lines) {
-                if (line.toLowerCase().contains(userDelete.toLowerCase())) {
-                    System.out.println("Are you sure you want to delete " + userDelete + " ? (y/n)");
-                    String userConfirmDelete = scanner.nextLine();
-                    if (userConfirmDelete.toLowerCase().equals("y")) {
-                        continue;
+        Path filePath = Paths.get(directory, filename);
+            try {
+                List<String> lines = Files.readAllLines(filePath);
+                List<String> newLines = new ArrayList<>();
+                for (String line : lines) {
+                    if (line.toLowerCase().contains(userDelete.toLowerCase())) {
+                        System.out.println("Are you sure you want to delete " + userDelete + " ? (y/n)");
+                        String finalConfirmDelete = scanner.nextLine();
+                        if (userConfirmDelete.toLowerCase().equals("y")) {
+                            continue;
+                        }
                     }
+                    newLines.add(line);
                 }
-                newLines.add(line);
+                reWriteFile(filePath, newLines);
+            } catch (IOException e) {
+                System.out.println("there is something wrong with Delete entry");
+                e.printStackTrace();
             }
-            reWriteFile(filePath, newLines);
-        } catch (IOException e) {
-            System.out.println("there is something wrong with Delete entry");
-            e.printStackTrace();
         }
     }
 
