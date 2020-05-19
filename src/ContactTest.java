@@ -1,4 +1,4 @@
-
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,6 +15,7 @@ public class ContactTest {
     static Path dataDirectory = Paths.get(directory);
     static Path dataFile = Paths.get(directory, filename);
 
+
     public static void main(String[] args) {
         boolean running = true;
         while (running) {
@@ -29,23 +30,41 @@ public class ContactTest {
         boolean continueRunningApp = true;
         switch (choice) {
             case 1://view  contacts
-                readFile(dataFile);
+                File file = new File("data/contacts.txt");
+                boolean emptyRead = file.exists() && file.length() == 0;
+                if (!emptyRead == true) {
+                    readFile(dataFile);
+                } else {
+                    System.out.println("your contacts list is empty, Add a friend!");
+                }
                 break;
             case 2: // add new contact
                 writeFile(dataFile);
                 break;
             case 3: //search
-                searchContact();
+                file = new File("data/contacts.txt");
+                boolean empty = file.exists() && file.length() == 0;
+                if (!empty == true) {
+                    searchContact();
+                } else {
+                    System.out.println("your contacts list is empty, try again");
+                }
                 break;
             case 4: //delete
-                deleteEntry();
+                file = new File("data/contacts.txt");
+                boolean emptyDelete = file.exists() && file.length() == 0;
+                if (!emptyDelete == true) {
+                    deleteEntry();
+                } else {
+                    System.out.println("your contacts list is empty, try again");
+                }
                 break;
             case 5: //end system
                 Scanner scanner = new Scanner(System.in);
                 System.out.println("Are you sure you want to exit? y/n");
                 String userEndSystem = scanner.nextLine();
                 if (!userEndSystem.toLowerCase().equals("y")) {
-                   continueRunningApp = true;
+                    continueRunningApp = true;
                 } else {
                     System.out.println("Have a good day!");
                     System.exit(0);
@@ -141,6 +160,12 @@ public class ContactTest {
         return null;
     }
 
+//    public static void emptyFile(){
+//       File file = new File("data/contacts.txt");
+//        boolean empty = file.exists() && file.length() == 0;
+//        System.out.println(empty);
+//    }
+
     public static String searchContact() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter a name you would like to search: ");
@@ -167,6 +192,7 @@ public class ContactTest {
 
     public static void deleteEntry() {
         Scanner scanner = new Scanner(System.in);
+
         Path filePath = Paths.get(directory, filename);
         System.out.println("Who would you like to delete?");
         readFile(dataFile);
