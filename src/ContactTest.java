@@ -1,5 +1,4 @@
-import java.io.File;
-import java.io.FileNotFoundException;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,70 +14,44 @@ public class ContactTest {
     static String filename = "contacts.txt";
     static Path dataDirectory = Paths.get(directory);
     static Path dataFile = Paths.get(directory, filename);
-    Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-
-
-//        Manually add to file
-//        contacts.add("Nayo | 123-234-2344");
-//        contacts.add("MH | 123-234-2344");
-
         boolean running = true;
         while (running) {
             System.out.println(returnMenuDisplay());
             int userInput = promptUserForChoice();
             running = executeUserChoice(userInput);
         }
-
-
-        //Method - create directory
-        createDir(dataDirectory);
-
-        //Method - create file
-        createFile(dataFile);
-
-        //Method - read file
-        readFile(dataFile);
-
-//        System.out.println("contactsArray = " + contactsArray.isEmpty());
-//        System.out.println("contactsArrayREALTest = " + contactsArray);
-    }
+    } // end main class
 
     // User input selection
-
     private static boolean executeUserChoice(int choice) {
         boolean continueRunningApp = true;
-
         switch (choice) {
             case 1://view  contacts
-
-                List<String> lines = readFile(dataFile);
-                System.out.printf("%-5s %s%n", "Name |", "Phone Number");
-                System.out.println("____________");
-                for (String line : lines) {
-                    System.out.printf("%s\n", line);
-                }
+                readFile(dataFile);
                 break;
             case 2: // add new contact
-
-                Scanner scanner = new Scanner(System.in);
-                System.out.println("Enter your contact's first name");
-                String enteredFirstName = scanner.nextLine();
-                System.out.println("Enter your contact's last name");
-                String enteredLastName = scanner.nextLine();
-                System.out.println("Enter your contact's phone number");
-                String enteredPhoneNumber = scanner.nextLine();
-
-                List<String> newEntry = Arrays.asList(enteredFirstName + " " + enteredLastName + "|" + enteredPhoneNumber);
-                newEntry = writeFile(dataFile, newEntry);
+                writeFile(dataFile);
                 break;
-
             case 3: //search
                 searchContact();
-
+                break;
+            case 4: //delete
+                deleteEntry();
+                break;
+            case 5: //end system
+                Scanner scanner = new Scanner(System.in);
+                System.out.println("Are you sure you want to exit? y/n");
+                String userEndSystem = scanner.nextLine();
+                if (!userEndSystem.toLowerCase().equals("y")) {
+                   continueRunningApp = true;
+                } else {
+                    System.out.println("Have a good day!");
+                    System.exit(0);
+                }
+                break;
         }
-
         return true;
     }
 
@@ -92,6 +65,13 @@ public class ContactTest {
                 "5. Exit.\n" +
                 "Enter an option (1, 2, 3, 4 or 5)";
         return userChoices;
+    }
+
+    //prompt for a response
+    public static int promptUserForChoice() {
+        Scanner scanner = new Scanner(System.in);
+        int response = Integer.parseInt(scanner.nextLine());
+        return response;
     }
 
     //creating a directory
@@ -117,9 +97,28 @@ public class ContactTest {
         }
     }
 
-    public static List<String> writeFile(Path aFile, List<String> aList) {
+    public static List<String> writeFile(Path aFile) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter your contact's first name");
+        String enteredFirstName = scanner.nextLine();
+        System.out.println("Enter your contact's last name");
+        String enteredLastName = scanner.nextLine();
+        System.out.println("Enter your contact's phone number");
+        String enteredPhoneNumber = scanner.nextLine();
+
+        List<String> newEntry = Arrays.asList(enteredFirstName + " " + enteredLastName + "|" + enteredPhoneNumber);
         try {
-            Files.write(aFile, aList, StandardOpenOption.APPEND);
+            Files.write(aFile, newEntry, StandardOpenOption.APPEND);
+        } catch (IOException e) {
+            System.out.println("Problems writing the file");
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static List<String> reWriteFile(Path file, List<String> list) {
+        try {
+            Files.write(file, list);
         } catch (IOException e) {
             System.out.println("Problems writing the file");
             e.printStackTrace();
@@ -129,7 +128,12 @@ public class ContactTest {
 
     public static List<String> readFile(Path aFile) {
         try {
-            return (Files.readAllLines(aFile));
+            List<String> lines = Files.readAllLines(aFile);
+            System.out.printf("%-5s %s%n", "Name |", "Phone Number");
+            System.out.println("--------------");
+            for (String line : lines) {
+                System.out.printf("%s\n", line);
+            }
         } catch (IOException e) {
             System.out.println("Problem reading the file");
             e.printStackTrace();
@@ -137,34 +141,67 @@ public class ContactTest {
         return null;
     }
 
-
-
-
-    public static String searchContact(){
+    public static String searchContact() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter a name you would like to search: ");
         String userSearch = sc.nextLine();
 
         Path filePath = Paths.get(directory, filename);
-        while(true) {
-            List<String> lines = readFile(filePath);
-            for (String line : lines) {
-                if (line.toLowerCase().contains(userSearch.toLowerCase())) {
-                    System.out.println( "Found: " + line);
+        while (true) {
+            try {
+                List<String> lines = Files.readAllLines(filePath);
+                for (String line : lines) {
+                    if (line.toLowerCase().contains(userSearch.toLowerCase())) {
+                        System.out.println("Found: " + line);
+                        return line;
+                    }
                 }
+                System.out.println("Contact not found.");
+                return searchContact();
+            } catch (IOException e) {
+                System.out.println("error in searching for contacts");
+                e.printStackTrace();
             }
-            System.out.println("Contact not found.");
-            return searchContact();
         }
     }
 
-
-    //prompt for a response
-    public static int promptUserForChoice() {
+    public static void deleteEntry() {
         Scanner scanner = new Scanner(System.in);
-        int response = Integer.parseInt(scanner.nextLine());
-        return response;
+        Path filePath = Paths.get(directory, filename);
+        System.out.println("Who would you like to delete?");
+        readFile(dataFile);
+        String userDelete = scanner.nextLine();
+        try {
+            List<String> lines = Files.readAllLines(filePath);
+            List<String> newLines = new ArrayList<>();
+            for (String line : lines) {
+                if (line.toLowerCase().contains(userDelete.toLowerCase())) {
+                    System.out.println("Are you sure you want to delete " + userDelete + " ? (y/n)");
+                    String userConfirmDelete = scanner.nextLine();
+                    if (userConfirmDelete.toLowerCase().equals("y")) {
+                        continue;
+                    }
+                }
+                newLines.add(line);
+            }
+            reWriteFile(filePath, newLines);
+        } catch (IOException e) {
+            System.out.println("there is something wrong with Delete entry");
+            e.printStackTrace();
+        }
     }
+
+//    public static void endSystem() {
+//        Scanner scanner = new Scanner(System.in);
+//        System.out.println("Are you sure you want to exit? y/n");
+//        String userEndSystem = scanner.nextLine();
+//        if (userEndSystem.toLowerCase().equals("y")) {
+//            System.out.println("Have a good day!");
+//            System.exit(0);
+//        } else {
+//            executeUserChoice();
+//        }
+//    }
 
 
 }
