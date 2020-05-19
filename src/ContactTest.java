@@ -119,19 +119,23 @@ public class ContactTest {
     //write file
     public static List<String> writeFile(Path aFile) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter your contact's first name");
-        String enteredFirstName = scanner.nextLine();
-        System.out.println("Enter your contact's last name");
-        String enteredLastName = scanner.nextLine();
-        System.out.println("Enter your contact's phone number");
-        String enteredPhoneNumber = scanner.nextLine();
+        System.out.println("Would you like to enter a new contact?(y/n)");
+        String userConfirm = scanner.nextLine();
+        if (userConfirm.toLowerCase().equals("yes")) {
+            System.out.println("Enter your contact's first name");
+            String enteredFirstName = scanner.nextLine();
+            System.out.println("Enter your contact's last name");
+            String enteredLastName = scanner.nextLine();
+            System.out.println("Enter your contact's phone number");
+            String enteredPhoneNumber = scanner.nextLine();
 
-        List<String> newEntry = Arrays.asList(enteredFirstName + " " + enteredLastName + "|" + enteredPhoneNumber);
-        try {
-            Files.write(aFile, newEntry, StandardOpenOption.APPEND);
-        } catch (IOException e) {
-            System.out.println("Problems writing the file");
-            e.printStackTrace();
+            List<String> newEntry = Arrays.asList(enteredFirstName + " " + enteredLastName + "|" + enteredPhoneNumber);
+            try {
+                Files.write(aFile, newEntry, StandardOpenOption.APPEND);
+            } catch (IOException e) {
+                System.out.println("Problems writing the file");
+                e.printStackTrace();
+            }
         }
         return null;
     }
@@ -194,16 +198,15 @@ public class ContactTest {
     }
 
 
-
     public static void deleteEntry() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Would you like to continue? y/n");
         String userConfirmDelete = scanner.nextLine();
         if (userConfirmDelete.toLowerCase().equals("y")) {
-        readFile(dataFile);
-        System.out.println("Who would you like to delete?");
-        String userDelete = scanner.nextLine();
-        Path filePath = Paths.get(directory, filename);
+            readFile(dataFile);
+            System.out.println("Who would you like to delete?");
+            String userDelete = scanner.nextLine();
+            Path filePath = Paths.get(directory, filename);
             try {
                 List<String> lines = Files.readAllLines(filePath);
                 List<String> newLines = new ArrayList<>();
